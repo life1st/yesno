@@ -17,10 +17,12 @@ seen.click(function(){
     /*屏蔽<a>标签点击事件避免重复点击*/
     $(this).addClass('disabled');
     /*在图片加载时更新<a>标签内容避免用户认为页面假死*/
+    var j=0;
     var t = setInterval(function(){
                 answer.seen = sData[i++];
                 i>2?i=0:i;
-            },400)
+                j>5?answer.content = 'emmmm...':j++;
+            },400);
 
     body.css('background','#000');
     answer.content = 'Let me think...';
@@ -34,10 +36,10 @@ seen.click(function(){
             tImage=res.image;
             /*加载图片在一个隐藏的元素中优化体验*/
             $("#tImg").attr("src",tImage);
-            /*tAnswer的值：yes,no,maybe*/
-            if(tAnswer=='yes') 
+            /*res.answer的值：yes,no,maybe*/
+            if(tAnswer==='yes')
                 tAnswer = 'Yes !';
-            else if(tAnswer=='no') 
+            else if(tAnswer==='no')
                 tAnswer = 'no...';
             /*图片加载完成后显示内容*/
             document.getElementById('tImg').onload = function() {
@@ -45,20 +47,20 @@ seen.click(function(){
                 seen.removeClass('disabled');
                 /*清除定时器，恢复<a>标签初始文本*/
                 clearInterval(t);
-                answer.seen = 'Get.'
+                answer.seen = 'Get.';
 
                 answer.content = tAnswer;
                 /*根据设备宽度选择背景重复模式*/
                 $(window).width()<=768?
                     body.css({"background":"url("+tImage+") top","background-size":"100%"}):
                     body.css({"background":"url("+tImage+") left top","background-size":"25%"})
-            }
+            };
             var dataNow = new Date().getTime();
             console.log(dataBf,dataNow);
             $('#time').html('+'+(dataNow-dataBf)+'ms').css('color','blue');
         }
     })
-})
+});
 
 /*  
     使用vue数据绑定代替JQuery控制文档（不过要多加载30k数据，多一个http请求。），
