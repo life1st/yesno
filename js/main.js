@@ -4,23 +4,27 @@ var answer = new Vue({
     data:{
         title:"hey dude.think of your question and type the button to get answer :",
         seen:'Get.',
-        content: '?'
+        content: '?',
+        tUrl:'#',
+        isClick:false
     }
 })
 var sData = ['.','..','...'],
-i = 0,
-dataBf = new Date().getTime(),
-seen = $('#seen'),
-body = $('body');
+    i = 0,
+    dataBf = new Date().getTime(),
+    seen = $('#seen'),
+    body = $('body');
 
 seen.click(function(){
     /*屏蔽<a>标签点击事件避免重复点击*/
-    $(this).addClass('disabled');
+    answer.isClick = true;
+    var j = 0;
     /*在图片加载时更新<a>标签内容避免用户认为页面假死*/
     var t = setInterval(function(){
-                answer.seen = sData[i++];
-                i>2?i=0:i;
-            },400)
+        answer.seen = sData[i++];
+        i>2?i=0:i;
+        j>5?answer.content = 'emmmm...':j++;
+    },400)
 
     body.css('background','#000');
     answer.content = 'Let me think...';
@@ -31,22 +35,23 @@ seen.click(function(){
         dataType:'json',
         success:function(res){
             var tAnswer=res.answer,
-            tImage=res.image;
+                tImage=res.image;
             /*加载图片在一个隐藏的元素中优化体验*/
-            $("#tImg").attr("src",tImage);
+            answer.tUrl = tImage;
             /*tAnswer的值：yes,no,maybe*/
-            if(tAnswer=='yes') 
+            if(tAnswer=='yes')
                 tAnswer = 'Yes !';
-            else if(tAnswer=='no') 
+            else if(tAnswer=='no')
                 tAnswer = 'no...';
             /*图片加载完成后显示内容*/
             document.getElementById('tImg').onload = function() {
                 /*恢复<a>标签点击事件*/
-                seen.removeClass('disabled');
+                answer.isClick = false;
                 /*清除定时器，恢复<a>标签初始文本*/
                 clearInterval(t);
                 answer.seen = 'Get.'
 
+                j=0;
                 answer.content = tAnswer;
                 /*根据设备宽度选择背景重复模式*/
                 $(window).width()<=768?
