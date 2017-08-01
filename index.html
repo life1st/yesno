@@ -9,10 +9,10 @@
 </head>
 <body>
 	<p id="time"></p>
-	<img src="#" id="tImg" />
 	<div id="content" v-cloak>
-		<h2>{{title}}</h2>
-		<a href="javascript:void(0)" id="seen" >{{seen}}</a>
+        <img :src="tUrl" id="tImg" />
+        <h2>{{title}}</h2>
+		<a href="javascript:void(0)" id="seen" :class="{disabled:isClick}">{{seen}}</a>
 		<p class="answer">{{content}}</p>
 	</div>
 	<script src="//cdn.bootcss.com/vue/2.4.2/vue.min.js"></script>
