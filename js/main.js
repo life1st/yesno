@@ -15,15 +15,22 @@ var sData = ['.','..','...'],
     seen = $('#seen'),
     body = $('body');
 
+var t;
 seen.click(function(){
     /*屏蔽<a>标签点击事件避免重复点击*/
     answer.isClick = true;
     var j = 0;
     /*在图片加载时更新<a>标签内容避免用户认为页面假死*/
-    var t = setInterval(function(){
+    t = setInterval(function(){
         answer.seen = sData[i++];
         i>2?i=0:i;
-        j>5?answer.content = 'emmmm...':j++;
+        j++;
+        if(j>8&&j<40){
+            answer.content = 'emmmm...'
+        }else{
+            answer.content = 'you say what?again.'
+            reset();
+        }
     },400)
 
     body.css('background','#000');
@@ -32,7 +39,6 @@ seen.click(function(){
     axios({
         method:'get',
         url:'https://yesno.wtf/api'
-
     }).then(function (res) {
         res = res.data;
         var tAnswer=res.answer,
@@ -44,15 +50,9 @@ seen.click(function(){
             tAnswer = 'Yes !';
         else if(tAnswer==='no')
             tAnswer = 'no...';
-        /*图片加载完成后显示内容*/
+        /*图片加载成功显示内容*/
         document.getElementById('tImg').onload = function() {
-            /*恢复<a>标签点击事件*/
-            answer.isClick = false;
-            /*清除定时器，恢复<a>标签初始文本*/
-            clearInterval(t);
-            answer.seen = 'Get.'
-
-            j=0;
+            reset();
             answer.content = tAnswer;
             /*根据设备宽度选择背景重复模式*/
             $(window).width()<=768?
@@ -66,6 +66,16 @@ seen.click(function(){
         console.log(error)
     })
 })
+
+function reset() {
+    /*恢复<a>标签点击事件*/
+    answer.isClick = false;
+    /*清除定时器，恢复<a>标签初始文本*/
+    clearInterval(t);
+    answer.seen = 'Get.'
+
+    j=0;
+}
 
 /*  
     使用vue数据绑定代替JQuery控制文档（不过要多加载30k数据，多一个http请求。），
