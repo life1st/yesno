@@ -6,6 +6,6 @@ h2{text-align:center;color:#FFF;font-size: 18px;font-weight: normal;}
 #seen:hover{background-color: #A71010;color:#DEDBDB;}
 #tImg{visibility: hidden;width:1px;height: 1px;}
 .answer{display:block;font-size:72px;text-align:center;margin: 10% auto;color:#FFF;z-index: 10;text-shadow: 5px 5px 5px #000;}
-#content{height: 100%}
+#content{height: 100%;width: 99%;overflow: hidden;margin:0 auto;}
 .disabled {pointer-events: none;cursor: default;opacity: 0.6;}
 [v-cloak]{display:none;}
