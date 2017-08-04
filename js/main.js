@@ -27,7 +27,7 @@ seen.click(function(){
         j++;
         if(j>8&&j<40){
             answer.content = 'emmmm...'
-        }else{
+        }else if(j>40){
             answer.content = 'you say what?again.'
             reset();
         }
