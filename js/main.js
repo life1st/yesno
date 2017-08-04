@@ -29,39 +29,41 @@ seen.click(function(){
     body.css('background','#000');
     answer.content = 'Let me think...';
 
-    $.ajax({
-        url:'https://yesno.wtf/api',
-        Type:'get',
-        dataType:'json',
-        success:function(res){
-            var tAnswer=res.answer,
-                tImage=res.image;
-            /*加载图片在一个隐藏的元素中优化体验*/
-            answer.tUrl = tImage;
-            /*tAnswer的值：yes,no,maybe*/
-            if(tAnswer=='yes')
-                tAnswer = 'Yes !';
-            else if(tAnswer=='no')
-                tAnswer = 'no...';
-            /*图片加载完成后显示内容*/
-            document.getElementById('tImg').onload = function() {
-                /*恢复<a>标签点击事件*/
-                answer.isClick = false;
-                /*清除定时器，恢复<a>标签初始文本*/
-                clearInterval(t);
-                answer.seen = 'Get.'
+    axios({
+        method:'get',
+        url:'https://yesno.wtf/api'
 
-                j=0;
-                answer.content = tAnswer;
-                /*根据设备宽度选择背景重复模式*/
-                $(window).width()<=768?
-                    body.css({"background":"url("+tImage+") top","background-size":"100%"}):
-                    body.css({"background":"url("+tImage+") left top","background-size":"25%"})
-            }
-            var dataNow = new Date().getTime();
-            console.log(dataBf,dataNow);
-            $('#time').html('+'+(dataNow-dataBf)+'ms').css('color','blue');
+    }).then(function (res) {
+        res = res.data;
+        var tAnswer=res.answer,
+            tImage=res.image;
+        /*加载图片在一个隐藏的元素中优化体验*/
+        answer.tUrl = tImage;
+        /*tAnswer的值：yes,no,maybe*/
+        if(tAnswer==='yes')
+            tAnswer = 'Yes !';
+        else if(tAnswer==='no')
+            tAnswer = 'no...';
+        /*图片加载完成后显示内容*/
+        document.getElementById('tImg').onload = function() {
+            /*恢复<a>标签点击事件*/
+            answer.isClick = false;
+            /*清除定时器，恢复<a>标签初始文本*/
+            clearInterval(t);
+            answer.seen = 'Get.'
+
+            j=0;
+            answer.content = tAnswer;
+            /*根据设备宽度选择背景重复模式*/
+            $(window).width()<=768?
+                body.css({"background":"url("+tImage+") top","background-size":"100%"}):
+                body.css({"background":"url("+tImage+") left top","background-size":"25%"})
         }
+        var dataNow = new Date().getTime();
+        console.log(dataBf,dataNow);
+        $('#time').html('+'+(dataNow-dataBf)+'ms').css('color','blue');
+    }).catch(function (error) {
+        console.log(error)
     })
 })
 
